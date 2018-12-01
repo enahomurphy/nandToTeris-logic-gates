@@ -42,5 +42,27 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    // Put you code here:
+    Not16(in=x, out=ntX);
+    And16(a=x, b=ntX, out=zeroX); // sets x to zero using the and law X . `X
+    Mux16(a=x, b=zeroX, sel=zx, out=zxX); //  zx == 1 zeroX[16] else x[16]
+
+    Not16(in=zxX, out=notX); // defines not x (!X)
+    Mux16(a=zxX, b=notX, sel=nx, out=nxX); // nx == 1 !x[16] else x[16]
+
+    Not16(in=y, out=ntY);
+    And16(a=y, b=ntY, out=zeroY); // sets x to zero using the and law Y . `Y
+    Mux16(a=y, b=zeroY, sel=zy, out=zyY);
+
+    Not16(in=zyY, out=notY);
+    Mux16(a=zyY, b=notY, sel=ny, out=nyY); 
+
+    Add16(a=nxX, b=nyY, out=xADDy);
+    And16(a=nxX, b=nyY, out=xANDy);
+
+    Mux16(a=xANDy, b=xADDy, sel=f, out=outF);
+
+    Not16(in=outF, out=NOTf);
+
+    Mux16(a=outF, b=NOTf, sel=no, out=out);
 }
